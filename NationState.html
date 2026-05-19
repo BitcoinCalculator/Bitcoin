@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0A0805">
+<title>The Bitcoin Nation-State Race — Sovereign Accumulation | SATOLOGY</title>
+<meta name="description" content="Nations are quietly buying Bitcoin. El Salvador, Bhutan, the United States — the sovereign accumulation arms race has begun and the supply is fixed at 21 million.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:#0A0805;color-scheme:dark}
+body{background:#0A0805;color:#E8DEC8;font-family:'Libre Baskerville',Georgia,serif;line-height:1.8;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:.5}
+
+nav{position:sticky;top:0;z-index:200;height:60px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,8,5,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(240,165,0,.1)}
+.nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+.nav-logo-sym{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:#F0A500}
+.nav-logo-name{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.22em;color:#E8DEC8;text-transform:uppercase}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-back{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.15em;color:#C0AD90;text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nav-back:hover{color:#F0A500}
+.nav-price{display:flex;align-items:center;gap:.45rem;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.2);border-radius:100px;padding:5px 12px;font-family:'IBM Plex Mono',monospace;font-size:.9rem;font-weight:600;color:#F0A500}
+.nav-dot{width:6px;height:6px;background:#4CAF50;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* HERO — strategic blue tint */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4rem 2rem;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(21,101,192,.10) 0%,transparent 70%);border-bottom:1px solid rgba(240,165,0,.12);position:relative}
+.hero-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.25em;color:#42A5F5;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .2s forwards}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,12vw,9rem);line-height:.92;letter-spacing:.02em;color:#FAF5EB;max-width:960px;opacity:0;animation:fadeUp .9s .4s forwards}
+.hero h1 span{color:#42A5F5;display:block}
+.hero-sub{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:clamp(1.05rem,2.5vw,1.4rem);color:#C0AD90;margin-top:1.5rem;max-width:640px;opacity:0;animation:fadeUp .9s .65s forwards}
+.scroll-hint{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0;animation:fadeUp 1s 1.4s forwards}
+.scroll-hint span{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.2em;color:#C0AD90;text-transform:uppercase}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#42A5F5,transparent);animation:scrollPulse 2s ease-in-out infinite}
+
+/* STAT STRIP */
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid rgba(240,165,0,.1);border-top:1px solid rgba(240,165,0,.1)}
+.stat-cell{padding:2rem 1.5rem;text-align:center;border-right:1px solid rgba(240,165,0,.08)}
+.stat-cell:last-child{border-right:none}
+.stat-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.5rem);color:#42A5F5;line-height:1;display:block;margin-bottom:.3rem}
+.stat-big.gold{color:#F0A500}
+.stat-desc{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;text-transform:uppercase;line-height:1.4}
+
+/* LAYOUT */
+.page-wrap{max-width:1100px;margin:0 auto;padding:4rem 2rem 8rem}
+.section{margin-bottom:5rem;opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.section.visible{opacity:1;transform:translateY(0)}
+
+.chapter{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.25em;color:#C47F00;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:1rem}
+.chapter::after{content:'';flex:1;height:1px;background:rgba(240,165,0,.15)}
+h2{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.2;color:#FAF5EB;margin-bottom:1.5rem;font-weight:400}
+p{margin-bottom:1.2rem;color:#E8DEC8;font-size:1.05rem}
+
+blockquote{padding:2.5rem 0;margin:3rem 0;border-top:1px solid rgba(66,165,245,.2);border-bottom:1px solid rgba(66,165,245,.2)}
+blockquote p{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:clamp(1.3rem,3vw,1.9rem);color:#FAF5EB;line-height:1.4;margin-bottom:0}
+blockquote cite{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.1em;text-transform:uppercase;display:block;margin-top:1rem}
+
+.mono-fact{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#42A5F5;background:rgba(66,165,245,.06);border-left:2px solid #42A5F5;padding:1rem 1.5rem;margin:2rem 0;letter-spacing:.05em;line-height:1.7}
+.mono-fact.gold{color:#F0A500;background:rgba(240,165,0,.06);border-left-color:#F0A500}
+
+.stat-block{background:#110E08;border:1px solid rgba(66,165,245,.2);border-left:3px solid #42A5F5;padding:2.5rem 2rem;margin:2.5rem 0}
+.stat-block.gold{border-color:rgba(240,165,0,.2);border-left-color:#F0A500}
+.stat-number{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,5rem);color:#42A5F5;line-height:1;display:block;margin-bottom:.4rem}
+.stat-number.gold{color:#F0A500}
+.stat-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;text-transform:uppercase}
+
+/* NATION CARDS */
+.nation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:2.5rem 0}
+@media(max-width:800px){.nation-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.nation-grid{grid-template-columns:1fr}}
+.nation-card{background:#0E0B07;border:1px solid rgba(240,165,0,.15);padding:2rem;transition:border-color .3s}
+.nation-card:hover{border-color:rgba(240,165,0,.4)}
+.nation-flag{font-size:2.2rem;line-height:1;margin-bottom:.8rem;display:block}
+.nation-name{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:#FAF5EB;margin-bottom:.3rem;display:block}
+.nation-btc{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:#F0A500;letter-spacing:.03em;display:block;margin-bottom:.4rem}
+.nation-status{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;margin-bottom:1rem;display:block}
+.nation-detail{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;line-height:1.6}
+.nation-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .7rem;margin-top:.8rem;border-radius:2px}
+.tag-first{background:rgba(240,165,0,.12);color:#F0A500;border:1px solid rgba(240,165,0,.3)}
+.tag-stealth{background:rgba(66,165,245,.1);color:#42A5F5;border:1px solid rgba(66,165,245,.3)}
+.tag-strategic{background:rgba(76,175,80,.1);color:#4CAF50;border:1px solid rgba(76,175,80,.3)}
+
+/* HOLDINGS TABLE */
+.holdings-table{width:100%;border-collapse:collapse;margin:2rem 0}
+.holdings-table th{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;color:#C47F00;text-align:left;padding:.8rem 1rem;background:#110E08;border-bottom:1px solid rgba(240,165,0,.2)}
+.holdings-table td{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;padding:.9rem 1rem;border-bottom:1px solid rgba(240,165,0,.07)}
+.holdings-table tr:hover td{background:rgba(66,165,245,.03)}
+.holdings-table td:first-child{color:#FAF5EB}
+.td-blue{color:#42A5F5}
+.td-gold{color:#F0A500}
+.td-green{color:#4CAF50}
+
+/* GAME THEORY VISUAL */
+.game-steps{display:flex;flex-direction:column;gap:0;margin:2.5rem 0;border:1px solid rgba(240,165,0,.12)}
+.game-step{display:grid;grid-template-columns:auto 1fr;gap:1.5rem;padding:1.8rem 2rem;border-bottom:1px solid rgba(240,165,0,.08);align-items:start}
+.game-step:last-child{border-bottom:none}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:#42A5F5;line-height:1;min-width:2rem;text-align:center}
+.step-body{}
+.step-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.06em;color:#FAF5EB;margin-bottom:.4rem}
+.step-desc{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;line-height:1.65}
+
+/* TWENTY ONE CAPITAL */
+.entity-box{background:#0E0B07;border:1px solid rgba(240,165,0,.2);padding:2.5rem;margin:2.5rem 0;position:relative;overflow:hidden}
+.entity-box::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(to bottom,#F0A500,transparent)}
+.entity-name{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;color:#F0A500;margin-bottom:.3rem;display:block}
+.entity-meta{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;display:block}
+.entity-stat{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:#FAF5EB;line-height:1;display:block;margin-bottom:.3rem}
+.entity-stat-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.5rem;display:block}
+.entity-body{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;line-height:1.7}
+
+/* ARMS RACE BAR */
+.race-visual{background:#0E0B07;border:1px solid rgba(240,165,0,.15);padding:2.5rem;margin:2.5rem 0}
+.race-title{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.2em;color:#C47F00;text-transform:uppercase;margin-bottom:2rem}
+.race-row{margin-bottom:1.8rem}
+.race-label{display:flex;justify-content:space-between;margin-bottom:.5rem;align-items:center}
+.race-name{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;display:flex;align-items:center;gap:.6rem}
+.race-flag{font-size:1.1rem}
+.race-val{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;color:#F0A500}
+.race-track{height:20px;background:rgba(255,255,255,.04);border-radius:2px;overflow:hidden}
+.race-fill{height:100%;border-radius:2px;transition:width 1.4s ease;width:0}
+
+/* FINALE */
+.finale{background:#070604;border-top:1px solid rgba(240,165,0,.15);padding:6rem 2rem;text-align:center}
+.finale-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.25em;color:#F0A500;text-transform:uppercase;margin-bottom:2rem}
+.finale h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,8vw,6rem);line-height:1;letter-spacing:.02em;color:#FAF5EB;max-width:800px;margin:0 auto 1.5rem}
+.finale h2 span{color:#F0A500}
+.finale-body{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:1.2rem;color:#C0AD90;max-width:540px;margin:0 auto 2rem}
+.finale-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
+.finale-link{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.15em;text-transform:uppercase;color:#C0AD90;text-decoration:none;border:1px solid rgba(240,165,0,.2);padding:.8rem 1.4rem;transition:color .2s,border-color .2s}
+.finale-link:hover{color:#F0A500;border-color:rgba(240,165,0,.5)}
+
+.footer-wrap{background:#070604;border-top:1px solid rgba(240,165,0,.1)}
+footer{max-width:1100px;margin:0 auto;padding:3rem 2rem;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:2rem}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#F0A500;letter-spacing:.06em}
+.footer-copy{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;text-transform:uppercase;margin-top:.5rem}
+.footer-links{display:flex;flex-direction:column;gap:.5rem;align-items:flex-end}
+.footer-links a{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;color:#C0AD90;text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:#F0A500}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+@media(max-width:700px){
+  .stat-strip{grid-template-columns:1fr 1fr}
+  .game-step{grid-template-columns:auto 1fr;gap:1rem;padding:1.2rem 1rem}
+  nav{padding:0 1rem}
+  .nav-back{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-sym">₿</span>
+    <span class="nav-logo-name">SATOLOGY</span>
+  </a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← Home</a>
+    <div class="nav-price">
+      <span class="nav-dot"></span>
+      <span id="btcPriceNav">$--</span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <p class="hero-label">🌐 The Sovereign Accumulation Has Begun</p>
+  <h1>THE NATION-STATE<span>BITCOIN RACE</span></h1>
+  <p class="hero-sub">El Salvador moved first. Bhutan mined in secret. The United States signed an executive order. When nation-states compete for a fixed supply of 21 million coins, the game theory is inescapable.</p>
+  <div class="scroll-hint">
+    <span>The Race</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<div class="stat-strip">
+  <div class="stat-cell">
+    <span class="stat-big">200K+</span>
+    <span class="stat-desc">Bitcoin in the US Strategic Reserve — Executive Order, March 2025</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-big">7,508</span>
+    <span class="stat-desc">BTC held by El Salvador — the world's first Bitcoin sovereign</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-big">~6,000</span>
+    <span class="stat-desc">BTC mined by Bhutan — hydropower mining since 2019, revealed 2023</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-big gold">21M</span>
+    <span class="stat-desc">Total Bitcoin that will ever exist. Every nation competes for the same pool.</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- GAME THEORY -->
+  <div class="section">
+    <div class="chapter">The Logic</div>
+    <h2>Why Nation-States Are Forced to Play</h2>
+    <p>Bitcoin's fixed supply of 21 million coins creates a strategic dynamic unlike anything in the history of monetary policy. Once one nation-state begins accumulating Bitcoin as a reserve asset, every other nation faces a stark choice: acquire Bitcoin now, at today's price, or acquire it later — at whatever price sovereign demand has pushed it to.</p>
+    <p>This is not a new concept in geopolitics. Nations race to acquire oil, rare earth minerals, enriched uranium — any strategic resource with limited supply and rising demand. Bitcoin simply compresses this dynamic into a 21-million-unit hard cap that no government, no central bank, and no act of legislation can change.</p>
+    <p>The first mover advantage is profound. El Salvador, a country with a GDP smaller than many American cities, now holds a sovereign Bitcoin treasury that has appreciated dramatically from its average cost basis. Bhutan's hydropower-funded mining operation quietly accumulated thousands of coins before the world noticed. And in March 2025, the United States federal government — the issuer of the world's reserve currency — officially designated Bitcoin a strategic reserve asset.</p>
+
+    <div class="mono-fact">
+      When the US — the world's largest economy and issuer of the global reserve currency — formally adopts Bitcoin as a strategic reserve asset, every other nation's treasury department must ask the same question: should we?
+    </div>
+  </div>
+
+  <!-- GAME THEORY STEPS -->
+  <div class="section">
+    <div class="chapter">Game Theory</div>
+    <h2>The Prisoner's Dilemma at Sovereign Scale</h2>
+    <p>The game theory of nation-state Bitcoin adoption follows a classic defection dynamic. The optimal individual strategy conflicts with collective inaction, driving each actor toward accumulation regardless of what others do.</p>
+
+    <div class="game-steps">
+      <div class="game-step">
+        <span class="step-num">01</span>
+        <div class="step-body">
+          <div class="step-title">The First Mover Gains the Most</div>
+          <div class="step-desc">Nations that accumulate Bitcoin early acquire coins at lower prices, before sovereign demand is priced in. Their cost basis is far lower than any late entrant. El Salvador began buying in 2021 at an average around $43,000 per coin — a price that may look extraordinarily cheap in a decade.</div>
+        </div>
+      </div>
+      <div class="game-step">
+        <span class="step-num">02</span>
+        <div class="step-body">
+          <div class="step-title">Waiting Is a Losing Strategy</div>
+          <div class="step-desc">For every month a nation delays, competing nations accumulate more of the fixed supply at lower prices. The pool of available coins shrinks as long-term holders — including sovereign funds — remove liquidity from exchanges. Demand rises; supply cannot increase. Price discovery is ruthless.</div>
+        </div>
+      </div>
+      <div class="game-step">
+        <span class="step-num">03</span>
+        <div class="step-body">
+          <div class="step-title">The Dollar's Reserve Status Is Not Permanent</div>
+          <div class="step-desc">History shows that reserve currencies rotate. The British pound, the Dutch guilder, the Spanish real — each dominated global trade before yielding to the next monetary hegemon. Nations hedging against dollar depreciation, sanctions exposure, and currency wars increasingly view Bitcoin as the only truly neutral reserve asset with no counterparty risk and no single issuer.</div>
+        </div>
+      </div>
+      <div class="game-step">
+        <span class="step-num">04</span>
+        <div class="step-body">
+          <div class="step-title">Mining Is Sovereign Minting</div>
+          <div class="step-desc">Nations with cheap energy — hydropower in Bhutan and Paraguay, geothermal in El Salvador and Iceland, stranded natural gas in the US — can mine Bitcoin directly, converting otherwise wasted energy into sovereign digital capital. This is arguably the most capital-efficient monetary strategy available to energy-rich nations in the 21st century.</div>
+        </div>
+      </div>
+      <div class="game-step">
+        <span class="step-num">05</span>
+        <div class="step-body">
+          <div class="step-title">Bitcoin Is Immune to Sanctions</div>
+          <div class="step-desc">Nations holding dollar-denominated reserves discovered in 2022 that the United States can freeze those assets instantly — as Russia learned when $300 billion in sovereign reserves were immobilized. Bitcoin held in sovereign cold storage answers to no government, no SWIFT network, no bank. This is not a theoretical advantage; it is an immediate geopolitical reality for dozens of nations.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOVEREIGN HOLDINGS -->
+  <div class="section">
+    <div class="chapter">The Players</div>
+    <h2>Who Is Already Holding Bitcoin</h2>
+    <p>Nation-state Bitcoin accumulation ranges from explicit strategic reserve designations to quiet sovereign wealth fund allocations. Here are the confirmed and credibly reported sovereign Bitcoin holders as of mid-2025.</p>
+
+    <div class="nation-grid">
+      <div class="nation-card">
+        <span class="nation-flag">🇺🇸</span>
+        <span class="nation-name">United States</span>
+        <span class="nation-btc">≥ 200,000 BTC</span>
+        <span class="nation-status">STRATEGIC RESERVE</span>
+        <div class="nation-detail">President Trump signed Executive Order 14178 on March 6, 2025, establishing the Strategic Bitcoin Reserve. Holdings primarily consist of BTC seized in criminal and civil asset forfeitures — Silk Road, Bitfinex hack recoveries, and others. The order prohibits sale and directs the Treasury to evaluate budget-neutral acquisition strategies for additional accumulation.</div>
+        <span class="nation-tag tag-strategic">Executive Order — Mar 2025</span>
+      </div>
+      <div class="nation-card">
+        <span class="nation-flag">🇸🇻</span>
+        <span class="nation-name">El Salvador</span>
+        <span class="nation-btc">7,508 BTC</span>
+        <span class="nation-status">SOVEREIGN TREASURY</span>
+        <div class="nation-detail">President Nayib Bukele adopted Bitcoin as legal tender in September 2021 — the first nation in history to do so. Following IMF pressure, El Salvador amended the law in early 2025 to make BTC acceptance voluntary for merchants while maintaining the state's own treasury position. The government's Chivo wallet infrastructure continues operating, and the Bitcoin Office under Abraham Doménech actively manages reserves and promotes Bitcoin-based investment in the country.</div>
+        <span class="nation-tag tag-first">First Sovereign Adopter</span>
+      </div>
+      <div class="nation-card">
+        <span class="nation-flag">🇧🇹</span>
+        <span class="nation-name">Bhutan</span>
+        <span class="nation-btc">~6,000 BTC</span>
+        <span class="nation-status">SOVEREIGN MINING</span>
+        <div class="nation-detail">The Royal Government of Bhutan, through its sovereign wealth fund Druk Holdings and Investments, has been mining Bitcoin since 2019 using the country's abundant, clean hydroelectric power. The operation was revealed publicly in April 2023. With minimal electrical costs and a government committed to carbon neutrality, Bhutan effectively converts Himalayan glacier melt into digital gold. No other sovereign has deployed a comparable energy-to-Bitcoin conversion strategy at scale.</div>
+        <span class="nation-tag tag-stealth">Stealth Mining Since 2019</span>
+      </div>
+      <div class="nation-card">
+        <span class="nation-flag">🇬🇧</span>
+        <span class="nation-name">United Kingdom</span>
+        <span class="nation-btc">Undisclosed</span>
+        <span class="nation-status">SEIZED ASSETS</span>
+        <div class="nation-detail">The UK's Metropolitan Police and HMRC have seized hundreds of millions of dollars worth of Bitcoin in enforcement actions. The largest UK seizure — 61,000 BTC linked to Chinese money laundering — was conducted in 2021. Disposal policies for seized Bitcoin remain subject to government discretion; there is no formal reserve designation, but holdings exist.</div>
+        <span class="nation-tag tag-stealth">Law Enforcement Seizures</span>
+      </div>
+      <div class="nation-card">
+        <span class="nation-flag">🇩🇪</span>
+        <span class="nation-name">Germany</span>
+        <span class="nation-btc">Sold (Former)</span>
+        <span class="nation-status">DIVESTED 2024</span>
+        <div class="nation-detail">The German federal government seized approximately 50,000 BTC in January 2024 from a piracy website operator. In a decision widely criticized in the Bitcoin community, Germany liquidated the entire position between June and July 2024, netting roughly $2.9 billion — and selling much of it near local lows before Bitcoin rallied significantly. This is considered by many analysts as a textbook example of how not to manage a sovereign Bitcoin position.</div>
+        <span class="nation-tag tag-stealth">Sold at Lows — 2024</span>
+      </div>
+      <div class="nation-card">
+        <span class="nation-flag">🇺🇦</span>
+        <span class="nation-name">Ukraine</span>
+        <span class="nation-btc">~46,351 BTC</span>
+        <span class="nation-status">WAR DONATIONS</span>
+        <div class="nation-detail">Following Russia's 2022 invasion, Ukraine received over $200 million in crypto donations — predominantly Bitcoin — from individuals and organizations around the world. Ukraine legalized cryptocurrency in 2022 partly to facilitate these inflows. The holdings have been used for military procurement and humanitarian aid, providing a real-world demonstration of Bitcoin's utility as censorship-resistant, borderless monetary infrastructure during geopolitical crisis.</div>
+        <span class="nation-tag tag-strategic">Wartime Monetary Innovation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOLDINGS BAR CHART -->
+  <div class="section">
+    <div class="chapter">Scale</div>
+    <h2>Sovereign Holdings Compared</h2>
+    <p>The gap between the United States and other sovereign holders underscores both the magnitude of the US position and the scale of what remains unclaimed. With approximately 3.7 million BTC estimated to be permanently lost, the effective supply competing for sovereign allocation is even smaller than the 21 million nominal cap.</p>
+
+    <div class="race-visual">
+      <div class="race-title">— Confirmed Sovereign BTC Holdings (2025) —</div>
+      <div class="race-row">
+        <div class="race-label">
+          <span class="race-name"><span class="race-flag">🇺🇸</span> United States</span>
+          <span class="race-val">≥ 200,000 BTC</span>
+        </div>
+        <div class="race-track"><div class="race-fill" data-width="100" style="background:linear-gradient(to right,#4CAF50,#2E7D32)"></div></div>
+      </div>
+      <div class="race-row">
+        <div class="race-label">
+          <span class="race-name"><span class="race-flag">🇸🇻</span> El Salvador</span>
+          <span class="race-val">7,508 BTC</span>
+        </div>
+        <div class="race-track"><div class="race-fill" data-width="3.7" style="background:linear-gradient(to right,#42A5F5,#1565C0)"></div></div>
+      </div>
+      <div class="race-row">
+        <div class="race-label">
+          <span class="race-name"><span class="race-flag">🇧🇹</span> Bhutan</span>
+          <span class="race-val">~6,000 BTC</span>
+        </div>
+        <div class="race-track"><div class="race-fill" data-width="3.0" style="background:linear-gradient(to right,#42A5F5,#1565C0)"></div></div>
+      </div>
+      <div class="race-row">
+        <div class="race-label">
+          <span class="race-name"><span class="race-flag">🇺🇦</span> Ukraine (donated)</span>
+          <span class="race-val">~46,351 BTC</span>
+        </div>
+        <div class="race-track"><div class="race-fill" data-width="23" style="background:linear-gradient(to right,#F0A500,#C47F00)"></div></div>
+      </div>
+      <div class="race-row">
+        <div class="race-label">
+          <span class="race-name"><span class="race-flag">🌐</span> All Nations Combined</span>
+          <span class="race-val">~5–8% of Supply</span>
+        </div>
+        <div class="race-track"><div class="race-fill" data-width="7" style="background:linear-gradient(to right,#E53935,#B71C1C)"></div></div>
+      </div>
+    </div>
+
+    <div class="mono-fact gold">
+      At current trajectories, sovereign entities could control 10–15% of all Bitcoin within the next decade. In a world where the US alone holds 200,000 BTC, the remaining 92% of the 21 million supply is subject to intensifying competition.
+    </div>
+  </div>
+
+  <!-- EL SALVADOR DEEP DIVE -->
+  <div class="section">
+    <div class="chapter">The First Mover</div>
+    <h2>What El Salvador Actually Did</h2>
+    <p>On June 9, 2021, El Salvador's Legislative Assembly passed the Bitcoin Law with 62 of 84 votes — the first act of sovereign recognition for Bitcoin as legal tender anywhere in the world. President Nayib Bukele, then 39, had announced the bill just three days earlier at a Miami Bitcoin conference to a standing ovation.</p>
+    <p>The geopolitical context matters. El Salvador is a country where 70% of the population had no bank account and over $6 billion per year flows in from Salvadorans working abroad — most of it bleeding 10–20% in Western Union and MoneyGram fees. Bitcoin on Lightning offered a direct alternative: near-instant international transfers for fractions of a cent, available to anyone with a smartphone.</p>
+    <p>The government deployed the Chivo wallet — a state-sponsored Bitcoin and dollar wallet — and seeded it with $30 in Bitcoin for every Salvadoran who signed up. Within weeks, more Salvadorans had downloaded Chivo than had bank accounts. The IMF protested. Fitch downgraded El Salvador's debt. The country held anyway.</p>
+
+    <div class="stat-block">
+      <span class="stat-number">~$500M</span>
+      <span class="stat-label">Estimated value of El Salvador's Bitcoin treasury at May 2025 prices — acquired at an average cost basis near $43,000. The nation turned a sovereign bet into a sovereign gain, and inspired a global conversation that no amount of IMF pressure has silenced.</span>
+    </div>
+
+    <p>In early 2025, under IMF loan conditions, El Salvador amended its Bitcoin law to make merchant acceptance voluntary rather than mandatory. This was widely reported as a retreat — but the government retained every Bitcoin in its treasury and has continued accumulating. The Bitcoin Office remains active and the country's Bitcoin-focused infrastructure investment continues.</p>
+  </div>
+
+  <!-- BHUTAN DEEP DIVE -->
+  <div class="section">
+    <div class="chapter">The Silent Miner</div>
+    <h2>How Bhutan Built a Digital Treasury in Secret</h2>
+    <p>In April 2023, Forbes revealed that the Royal Government of Bhutan — population 800,000, landlocked in the Himalayas — had been mining Bitcoin for four years through Druk Holdings and Investments, the kingdom's sovereign wealth fund. The disclosure was a revelation: a tiny nation had executed one of the most sophisticated sovereign Bitcoin strategies on the planet, in complete silence.</p>
+    <p>Bhutan's advantage is energy. The country generates far more hydroelectric power from its glacial rivers than it can use domestically, historically exporting the surplus to India. Bitcoin mining gave Bhutan a new buyer for that energy — one that converts kilowatt-hours directly into digital assets sitting in sovereign cold storage. No export infrastructure needed. No dependence on a single customer. Pure monetary sovereignty minted from mountain water.</p>
+
+    <div class="mono-fact">
+      Bhutan's ~6,000 BTC represents roughly 25% of the country's annual GDP in stored value — an extraordinary concentration of national wealth in a single digital asset, accumulated at near-zero marginal cost by deploying surplus renewable energy.
+    </div>
+
+    <p>Bhutan has partnered with several Western mining firms to expand capacity, and geopolitically, its approach offers a template for any energy-surplus nation: convert stranded power into digital capital that requires no physical storage, no shipping, and cannot be confiscated by any foreign power. Paraguay, Laos, and Iceland are watching closely.</p>
+  </div>
+
+  <!-- US STRATEGIC RESERVE -->
+  <div class="section">
+    <div class="chapter">The Superpower Moves</div>
+    <h2>The US Strategic Bitcoin Reserve</h2>
+    <p>On March 6, 2025, President Donald Trump signed an executive order establishing the Strategic Bitcoin Reserve — directing the US Treasury and Department of Justice to consolidate all Bitcoin held by the federal government into a single sovereign reserve, and prohibiting its sale. The order also directed relevant agencies to develop strategies for acquiring additional Bitcoin in a budget-neutral manner.</p>
+    <p>The order was simultaneously symbolic and structural. Symbolically, it ended the federal government's practice of auctioning seized Bitcoin — a policy that saw the US Treasury repeatedly sell coins (often near local price lows) that would have been worth multiples of their sale price just months later. Structurally, it created a new category of government asset: a digital reserve held not as evidence or forfeiture, but as national capital.</p>
+
+    <blockquote>
+      <p>"The United States will not sell its Bitcoin. It will hold it as a strategic reserve asset, just as it holds gold."</p>
+      <cite>— Implied framework of EO 14178, March 2025</cite>
+    </blockquote>
+
+    <div class="stat-block gold">
+      <span class="stat-number gold">200,000+ BTC</span>
+      <span class="stat-label">Estimated US federal Bitcoin holdings. At $100,000 per coin, this represents $20 billion in digital sovereign capital — roughly the same value as the US Strategic Petroleum Reserve at its peak. The US government is, by a wide margin, the largest known sovereign holder of Bitcoin on Earth.</span>
+    </div>
+
+    <p>The strategic implications extend beyond the balance sheet. When the United States — the country that issues the world's reserve currency — designates Bitcoin as a strategic reserve asset, it sends an unmistakable signal to every other nation's treasury department, central bank, and sovereign wealth fund. The asset has been legitimized at the highest possible level of financial authority.</p>
+
+    <p>Some analysts point to a deeper irony: the United States, whose Federal Reserve helped motivate the creation of Bitcoin in the first place, is now one of its largest holders. The government that printed $3 trillion in eight weeks in 2020 now holds digital assets whose supply cannot be inflated by any entity on Earth.</p>
+  </div>
+
+  <!-- TWENTY ONE CAPITAL -->
+  <div class="section">
+    <div class="chapter">Private Capital</div>
+    <h2>Corporate Sovereigns — Companies That Hold Like Nations</h2>
+    <p>Nation-states are not the only entities accumulating Bitcoin with the strategic intensity of sovereign actors. A new category of publicly traded corporate treasuries has emerged — companies whose primary asset and investment thesis is Bitcoin accumulation, effectively functioning as listed proxy vehicles for sovereign-scale holdings.</p>
+
+    <div class="entity-box">
+      <span class="entity-name">Twenty One Capital</span>
+      <span class="entity-meta">Founded 2025 · Led by Jack Mallers (Strike) · Backed by SoftBank, Tether, Cantor Fitzgerald</span>
+      <span class="entity-stat">≥ 42,000 BTC</span>
+      <span class="entity-stat-label">Target Initial Holdings at Launch</span>
+      <div class="entity-body">Twenty One Capital launched in 2025 as a dedicated Bitcoin holding company, taking direct aim at MicroStrategy's model with one key distinction: it is built and led by Jack Mallers, the founder of Strike — the most globally deployed Bitcoin payment network. Backed by SoftBank's capital firepower, Tether's Bitcoin reserves, and Cantor Fitzgerald's financial infrastructure, Twenty One represents institutional Bitcoin accumulation at a scale only a handful of companies can match. The company introduced "Bitcoin Per Share" as its core performance metric — a direct challenge to the traditional EPS framing of corporate value.</div>
+    </div>
+
+    <div class="entity-box">
+      <span class="entity-name">MicroStrategy (Strategy)</span>
+      <span class="entity-meta">Michael Saylor · Nasdaq: MSTR · Accumulating since August 2020</span>
+      <span class="entity-stat">≥ 555,000 BTC</span>
+      <span class="entity-stat-label">Holdings as of May 2025 (Largest Corporate Holder)</span>
+      <div class="entity-body">Michael Saylor's MicroStrategy — rebranded as Strategy — pioneered the corporate Bitcoin treasury model, converting the company's cash reserves and issuing debt instruments to fund Bitcoin accumulation starting in August 2020. At over half a million Bitcoin, Strategy holds more BTC than most sovereign nations and many institutional fund managers combined. Saylor's thesis — that Bitcoin is the most reliable long-term store of value and that holding cash is the riskiest possible financial decision — has been validated by the company's share price performance since the strategy's inception.</div>
+    </div>
+
+    <p>These corporate actors blur the line between institutional investment and sovereign accumulation. When publicly traded companies hold hundreds of thousands of Bitcoin on behalf of shareholders distributed across dozens of countries, the concept of "sovereign" control of Bitcoin becomes increasingly complex — and the effective supply available for future acquisition becomes increasingly constrained.</p>
+  </div>
+
+  <!-- THE FIXED SUPPLY PROBLEM -->
+  <div class="section">
+    <div class="chapter">The Mathematics</div>
+    <h2>21 Million Coins. 195 Countries. Do the Math.</h2>
+    <p>There are approximately 19.7 million Bitcoin in circulation as of mid-2025. Roughly 3–4 million are estimated to be permanently lost — sent to inaccessible wallets, lost hard drives, forgotten seed phrases from the early years. The effective circulating supply available for purchase is therefore somewhere between 15 and 16 million Bitcoin.</p>
+    <p>Divide that among 195 countries. The average nation-state can acquire roughly 80,000 Bitcoin if the distribution were perfectly equal — which it will not be. The first movers take the most. The laggards get priced out. Small nations that delay may find themselves unable to build meaningful reserves at any price they can politically sustain.</p>
+
+    <div class="holdings-table-wrap">
+      <table class="holdings-table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Nations Holding</th>
+            <th>Avg BTC Each</th>
+            <th>Supply Sovereign-Held</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Today (2025)</td>
+            <td class="td-blue">~10 active holders</td>
+            <td class="td-gold">~20,000 BTC avg</td>
+            <td class="td-blue">~1.2% of supply</td>
+          </tr>
+          <tr>
+            <td>2027 Projection</td>
+            <td class="td-blue">~30–40 nations</td>
+            <td class="td-gold">~10,000–50,000 BTC</td>
+            <td class="td-blue">~3–5% of supply</td>
+          </tr>
+          <tr>
+            <td>2030 Projection</td>
+            <td class="td-blue">~60–80 nations</td>
+            <td class="td-gold">varies widely</td>
+            <td class="td-blue">~8–15% of supply</td>
+          </tr>
+          <tr>
+            <td>Long-Term Equilibrium</td>
+            <td class="td-blue">Most nations some BTC</td>
+            <td class="td-gold">Stratified by timing</td>
+            <td class="td-gold">20–30%+ of supply</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mono-fact gold">
+      No central bank can print more Bitcoin. No executive order can increase the 21 million cap. No act of legislation — in any country, at any time — can inflate the supply. This is the property that makes sovereign accumulation an irreversible one-way door: once a nation holds Bitcoin, it has something no monetary authority on Earth can create.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="chapter">The Geopolitics</div>
+    <h2>Bitcoin as Neutral Reserve: The End of Dollar Dominance?</h2>
+    <p>The United States dollar achieved its reserve currency status through a combination of factors: the Bretton Woods agreement, US military and economic dominance, the petrodollar system anchored by the 1974 Saudi Arabia deal, and the sheer depth of US Treasury markets. For 80 years, holding dollars meant holding stability.</p>
+    <p>But cracks have appeared. The 2022 freezing of Russian sovereign reserves demonstrated that dollar-denominated assets are ultimately subject to US political discretion. Nations that had long assumed their dollar holdings were inviolable discovered otherwise in weeks. The search for genuinely neutral reserve assets accelerated dramatically — and Bitcoin, with its permissionless architecture, no issuing sovereign, and immunity to unilateral seizure, entered central bank conversations that would have seemed absurd five years earlier.</p>
+    <p>The shift is not ideological — it is actuarial. Nations diversifying reserves into Bitcoin are not making a political statement about fiat currency. They are managing sovereign risk. Just as a prudent investor holds gold alongside equities, a prudent nation in a multipolar world holds some Bitcoin alongside its dollar and euro reserves. The question is no longer whether — it is how much, and when.</p>
+
+    <blockquote>
+      <p>"Bitcoin is the first money in history that no government issued, no army backs, and no border stops. That is not a bug. For billions of people living under financial repression, it is the only feature that matters."</p>
+      <cite>— Paraphrasing the thesis shared across sovereign Bitcoin adopters</cite>
+    </blockquote>
+  </div>
+
+</div>
+
+<!-- FINALE -->
+<div class="finale">
+  <div class="finale-label">The Supply Is Finite</div>
+  <h2>THE RACE HAS<span>NO FINISH LINE</span></h2>
+  <p class="finale-body">Every year that passes, more Bitcoin moves into long-term sovereign and institutional storage. The window to accumulate at any price is not closing — but the price of entry rises with every nation that moves before you.</p>
+  <div class="finale-links">
+    <a href="FiatTrap.html" class="finale-link">The Fiat Trap</a>
+    <a href="Lightning.html" class="finale-link">Lightning Network</a>
+    <a href="PowerLaw.html" class="finale-link">Power Law Model</a>
+    <a href="index.html" class="finale-link">← All Topics</a>
+  </div>
+</div>
+
+<div class="footer-wrap">
+  <footer>
+    <div>
+      <div class="footer-logo">₿ SATOLOGY</div>
+      <div class="footer-copy">Bitcoin Education · Not Financial Advice</div>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="FiatTrap.html">The Fiat Trap</a>
+      <a href="Lightning.html">Lightning Network</a>
+      <a href="PowerLaw.html">Power Law</a>
+      <a href="NationState.html">Nation-State Race</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+// Live Bitcoin price
+async function fetchPrice() {
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+    const d = await r.json();
+    const p = d.bitcoin.usd;
+    const fmt = p >= 1000 ? '$' + (p/1000).toFixed(1) + 'K' : '$' + p.toLocaleString();
+    document.getElementById('btcPriceNav').textContent = fmt;
+  } catch(e) {}
+}
+fetchPrice();
+setInterval(fetchPrice, 60000);
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+// Race bars — animate on scroll
+const barObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      e.target.querySelectorAll('.race-fill').forEach(fill => {
+        const w = fill.getAttribute('data-width');
+        fill.style.width = w + '%';
+      });
+      barObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.race-visual').forEach(v => barObserver.observe(v));
+</script>
+</body>
+</html>

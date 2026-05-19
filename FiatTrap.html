@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0A0805">
+<title>The Fiat Trap — Why Money Dies | SATOLOGY</title>
+<meta name="description" content="How governments create money from nothing, why inflation is a hidden tax on your savings, and why Bitcoin's 21 million cap changes everything.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:#0A0805;color-scheme:dark}
+body{background:#0A0805;color:#E8DEC8;font-family:'Libre Baskerville',Georgia,serif;line-height:1.8;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:.5}
+
+nav{position:sticky;top:0;z-index:200;height:60px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,8,5,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(240,165,0,.1)}
+.nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+.nav-logo-sym{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:#F0A500}
+.nav-logo-name{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.22em;color:#E8DEC8;text-transform:uppercase}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-back{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.15em;color:#C0AD90;text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nav-back:hover{color:#F0A500}
+.nav-price{display:flex;align-items:center;gap:.45rem;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.2);border-radius:100px;padding:5px 12px;font-family:'IBM Plex Mono',monospace;font-size:.9rem;font-weight:600;color:#F0A500}
+.nav-dot{width:6px;height:6px;background:#4CAF50;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* HERO — red-tinted for fiat danger */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4rem 2rem;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(180,30,30,.08) 0%,transparent 70%);border-bottom:1px solid rgba(240,165,0,.12);position:relative}
+.hero-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.25em;color:#E53935;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .2s forwards}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,12vw,9rem);line-height:.92;letter-spacing:.02em;color:#FAF5EB;max-width:900px;opacity:0;animation:fadeUp .9s .4s forwards}
+.hero h1 span{color:#E53935;display:block}
+.hero-sub{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:clamp(1.05rem,2.5vw,1.4rem);color:#C0AD90;margin-top:1.5rem;max-width:620px;opacity:0;animation:fadeUp .9s .65s forwards}
+.scroll-hint{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0;animation:fadeUp 1s 1.4s forwards}
+.scroll-hint span{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.2em;color:#C0AD90;text-transform:uppercase}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#E53935,transparent);animation:scrollPulse 2s ease-in-out infinite}
+
+/* STAT STRIP */
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid rgba(240,165,0,.1);border-top:1px solid rgba(240,165,0,.1)}
+.stat-cell{padding:2rem 1.5rem;text-align:center;border-right:1px solid rgba(240,165,0,.08)}
+.stat-cell:last-child{border-right:none}
+.stat-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.5rem);color:#E53935;line-height:1;display:block;margin-bottom:.3rem}
+.stat-big.gold{color:#F0A500}
+.stat-desc{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;text-transform:uppercase;line-height:1.4}
+
+/* LAYOUT */
+.page-wrap{max-width:1100px;margin:0 auto;padding:4rem 2rem 8rem}
+.section{margin-bottom:5rem;opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.section.visible{opacity:1;transform:translateY(0)}
+
+.chapter{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.25em;color:#C47F00;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:1rem}
+.chapter::after{content:'';flex:1;height:1px;background:rgba(240,165,0,.15)}
+h2{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.2;color:#FAF5EB;margin-bottom:1.5rem;font-weight:400}
+p{margin-bottom:1.2rem;color:#E8DEC8;font-size:1.05rem}
+
+blockquote{padding:2.5rem 0;margin:3rem 0;border-top:1px solid rgba(229,57,53,.2);border-bottom:1px solid rgba(229,57,53,.2)}
+blockquote p{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:clamp(1.3rem,3vw,1.9rem);color:#FAF5EB;line-height:1.4;margin-bottom:0}
+blockquote cite{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.1em;text-transform:uppercase;display:block;margin-top:1rem}
+
+.mono-fact{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#E53935;background:rgba(229,57,53,.06);border-left:2px solid #E53935;padding:1rem 1.5rem;margin:2rem 0;letter-spacing:.05em;line-height:1.7}
+.mono-fact.gold{color:#F0A500;background:rgba(240,165,0,.06);border-left-color:#F0A500}
+
+.stat-block{background:#110E08;border:1px solid rgba(229,57,53,.2);border-left:3px solid #E53935;padding:2.5rem 2rem;margin:2.5rem 0}
+.stat-block.gold{border-color:rgba(240,165,0,.2);border-left-color:#F0A500}
+.stat-number{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,5rem);color:#E53935;line-height:1;display:block;margin-bottom:.4rem}
+.stat-number.gold{color:#F0A500}
+.stat-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;text-transform:uppercase}
+
+/* SUPPLY VISUAL */
+.supply-bar{background:#0E0B07;border:1px solid rgba(240,165,0,.15);padding:2.5rem;margin:2.5rem 0}
+.bar-title{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.2em;color:#C47F00;text-transform:uppercase;margin-bottom:1.5rem}
+.bar-row{margin-bottom:1.5rem}
+.bar-label{display:flex;justify-content:space-between;margin-bottom:.5rem}
+.bar-name{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em}
+.bar-val{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#FAF5EB}
+.bar-track{height:24px;background:rgba(255,255,255,.04);border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px;transition:width 1.2s ease}
+
+/* COLLAPSE TABLE */
+.collapse-table{width:100%;border-collapse:collapse;margin:2rem 0}
+.collapse-table th{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;color:#C47F00;text-align:left;padding:.8rem 1rem;background:#110E08;border-bottom:1px solid rgba(240,165,0,.2)}
+.collapse-table td{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;padding:.9rem 1rem;border-bottom:1px solid rgba(240,165,0,.07)}
+.collapse-table tr:hover td{background:rgba(229,57,53,.03)}
+.collapse-table td:first-child{color:#FAF5EB}
+.td-red{color:#E53935}
+.td-gold{color:#F0A500}
+
+/* THE FIX */
+.fix-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:2.5rem 0}
+.fix-card{padding:2rem;border:1px solid rgba(240,165,0,.15)}
+.fix-card.bad{background:rgba(229,57,53,.05);border-color:rgba(229,57,53,.25)}
+.fix-card.good{background:rgba(76,175,80,.05);border-color:rgba(76,175,80,.25)}
+.fix-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.06em;margin-bottom:1rem}
+.fix-card.bad .fix-title{color:#E53935}
+.fix-card.good .fix-title{color:#4CAF50}
+.fix-list{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.fix-list li{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;padding-left:1.2rem;position:relative;line-height:1.5}
+.fix-card.bad .fix-list li::before{content:'✗';position:absolute;left:0;color:#E53935}
+.fix-card.good .fix-list li::before{content:'✓';position:absolute;left:0;color:#4CAF50}
+
+/* FINALE */
+.finale{background:#070604;border-top:1px solid rgba(240,165,0,.15);padding:6rem 2rem;text-align:center}
+.finale-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.25em;color:#F0A500;text-transform:uppercase;margin-bottom:2rem}
+.finale h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,8vw,6rem);line-height:1;letter-spacing:.02em;color:#FAF5EB;max-width:700px;margin:0 auto 1.5rem}
+.finale h2 span{color:#F0A500}
+.finale-body{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:1.2rem;color:#C0AD90;max-width:520px;margin:0 auto 2rem}
+.finale-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
+.finale-link{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.15em;text-transform:uppercase;color:#C0AD90;text-decoration:none;border:1px solid rgba(240,165,0,.2);padding:.8rem 1.4rem;transition:color .2s,border-color .2s}
+.finale-link:hover{color:#F0A500;border-color:rgba(240,165,0,.5)}
+
+.footer-wrap{background:#070604;border-top:1px solid rgba(240,165,0,.1)}
+footer{max-width:1100px;margin:0 auto;padding:3rem 2rem;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:2rem}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#F0A500;letter-spacing:.06em}
+.footer-copy{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;text-transform:uppercase;margin-top:.5rem}
+.footer-links{display:flex;flex-direction:column;gap:.5rem;align-items:flex-end}
+.footer-links a{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;color:#C0AD90;text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:#F0A500}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+@media(max-width:700px){
+  .stat-strip{grid-template-columns:1fr 1fr}
+  .fix-grid{grid-template-columns:1fr}
+  nav{padding:0 1rem}
+  .nav-back{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-sym">₿</span>
+    <span class="nav-logo-name">SATOLOGY</span>
+  </a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← Home</a>
+    <div class="nav-price">
+      <span class="nav-dot"></span>
+      <span id="btcPriceNav">$--</span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <p class="hero-label">⚠ The System Is Working As Designed</p>
+  <h1>THE FIAT<span>TRAP</span></h1>
+  <p class="hero-sub">Every dollar you save is being diluted. This is not an accident — it is policy. Understanding this is why Bitcoin exists.</p>
+  <div class="scroll-hint">
+    <span>The Truth</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<div class="stat-strip">
+  <div class="stat-cell">
+    <span class="stat-big">80%</span>
+    <span class="stat-desc">Of all US dollars ever created were printed after 2020</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-big">$22T</span>
+    <span class="stat-desc">US M2 Money Supply today — up from $4T in 2000</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-big">97%</span>
+    <span class="stat-desc">Purchasing power lost by the US dollar since 1913</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-big gold">21M</span>
+    <span class="stat-desc">Bitcoin that will ever exist. This number cannot change.</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- HOW MONEY IS CREATED -->
+  <div class="section">
+    <div class="chapter">The Machine</div>
+    <h2>Where Money Actually Comes From</h2>
+    <p>Most people assume money is printed by governments and distributed into the economy. The reality is far stranger — and far more consequential. The vast majority of money in circulation today was created out of nothing by commercial banks, and is backed by nothing except the promise to repay debt.</p>
+    <p>When you take out a mortgage for $400,000, your bank does not lend you money it already has in a vault. It types $400,000 into a computer, credits your account, and simultaneously creates a $400,000 liability on its books. The money did not exist before that keystroke. This is called fractional reserve banking, and it is the foundation of the entire modern financial system.</p>
+    <p>Layer on top of this the central bank — the Federal Reserve — which creates base money through "quantitative easing": purchasing government bonds and mortgage-backed securities by crediting bank reserves it conjures from thin air. The money supply expands with every crisis, every recession, every war, every election cycle where spending promises must be kept.</p>
+
+    <div class="mono-fact">
+      In 2020 alone, the US Federal Reserve expanded its balance sheet by $3 trillion in eight weeks.<br>
+      The same amount took 100 years to accumulate between 1913 and 2008.
+    </div>
+
+    <div class="stat-block">
+      <span class="stat-number">$4T → $22T</span>
+      <span class="stat-label">US M2 Money Supply: 2000 to 2026. A 450% expansion in 26 years. Your savings account earned 0.5% interest. Inflation ran at 3–9%. You were losing ground every single year and the math was hidden from you.</span>
+    </div>
+  </div>
+
+  <!-- THE SUPPLY BAR VISUAL -->
+  <div class="section">
+    <div class="chapter">The Numbers</div>
+    <h2>The Expansion Nobody Voted For</h2>
+
+    <div class="supply-bar" id="supplySection">
+      <div class="bar-title">// US M2 Money Supply Growth — Selected Milestones</div>
+      <div class="bar-row">
+        <div class="bar-label">
+          <span class="bar-name">1913 — Federal Reserve Created</span>
+          <span class="bar-val">~$20B</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" data-width="0.1" style="background:#555;width:0"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">
+          <span class="bar-name">2000 — Dot-Com Era</span>
+          <span class="bar-val">$4.6T</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" data-width="21" style="background:#8A6A00;width:0"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">
+          <span class="bar-name">2008 — Financial Crisis</span>
+          <span class="bar-val">$7.8T</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" data-width="35" style="background:#B08000;width:0"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">
+          <span class="bar-name">2020 — Pre-COVID</span>
+          <span class="bar-val">$15.4T</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" data-width="70" style="background:#D09500;width:0"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">
+          <span class="bar-name">2022 — Post-COVID Peak</span>
+          <span class="bar-val">$21.7T</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" data-width="98" style="background:#E53935;width:0"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">
+          <span class="bar-name">2026 — Today</span>
+          <span class="bar-val">$22.4T</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" data-width="100" style="background:#E53935;width:0"></div></div>
+      </div>
+    </div>
+
+    <p>The dollar you hold today is worth less than four cents compared to a 1913 dollar. That is not a bug — it is the design. A currency that slowly loses value encourages spending and discourages saving, which benefits debtors (including governments) at the expense of savers.</p>
+  </div>
+
+  <!-- INFLATION AS A TAX -->
+  <div class="section">
+    <div class="chapter">The Hidden Tax</div>
+    <h2>Inflation Is Not a Natural Disaster. It Is a Policy Choice.</h2>
+    <p>When the government needs money it doesn't have — for wars, bailouts, stimulus programs, or simply to cover the gap between what it promises and what it collects in taxes — it has a powerful option unavailable to ordinary citizens: it can create the money. Or it can instruct the central bank to buy its debt with newly created reserves, which amounts to the same thing.</p>
+    <p>The result is inflation. Prices rise because more money is chasing the same amount of goods. Your grocery bill goes up. Your rent goes up. Your savings, sitting in a bank account earning 0.5%, lose purchasing power in real terms every year. You were never asked to pay this tax. It was extracted silently, spread across every dollar you own.</p>
+
+    <blockquote>
+      <p>"By a continuing process of inflation, governments can confiscate, secretly and unobserved, an important part of the wealth of their citizens."</p>
+      <cite>— John Maynard Keynes, economist</cite>
+    </blockquote>
+
+    <p>The cruelest aspect of inflation is who it hurts most. The wealthy hold assets — stocks, real estate, businesses — that appreciate alongside or faster than inflation. The saver with $50,000 in a checking account gets destroyed. The billionaire with $50,000,000 in a diversified portfolio gets richer. Inflation is a regressive tax disguised as economic policy.</p>
+
+    <div class="mono-fact">
+      $100,000 saved in 2000 → Real purchasing power in 2026: approximately $54,000<br>
+      The same $100,000 invested in Bitcoin in January 2015 → Worth $7,200,000+ today<br>
+      Bitcoin is not an investment. It is a refusal to be robbed slowly.
+    </div>
+  </div>
+
+  <!-- HISTORY OF COLLAPSE -->
+  <div class="section">
+    <div class="chapter">The Graveyard</div>
+    <h2>Every Fiat Currency Eventually Dies</h2>
+    <p>This is not a fringe view. It is the documented historical record. No fiat currency in history has maintained its value indefinitely. Every empire that has debased its currency — Rome clipping coins, Weimar Germany hyperinflating, modern Venezuela and Zimbabwe — has followed the same arc: print more, lose trust, collapse.</p>
+
+    <table class="collapse-table">
+      <thead>
+        <tr>
+          <th>Country / Currency</th>
+          <th>Peak Inflation</th>
+          <th>Outcome</th>
+          <th>Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Weimar Germany</td>
+          <td class="td-red">3,250,000%/month</td>
+          <td>Wheelbarrows of cash for bread. Currency replaced.</td>
+          <td>1923</td>
+        </tr>
+        <tr>
+          <td>Hungary</td>
+          <td class="td-red">41,900,000,000,000,000%</td>
+          <td>Highest inflation ever recorded. 100 quintillion pengő per USD.</td>
+          <td>1946</td>
+        </tr>
+        <tr>
+          <td>Zimbabwe</td>
+          <td class="td-red">89.7 Sextillion %/month</td>
+          <td>$100 trillion dollar notes. Currency abandoned. USD adopted.</td>
+          <td>2008</td>
+        </tr>
+        <tr>
+          <td>Venezuela</td>
+          <td class="td-red">1,000,000%+/year</td>
+          <td>Currency collapsed. 7 million fled the country. Ongoing.</td>
+          <td>2018–present</td>
+        </tr>
+        <tr>
+          <td>Lebanon</td>
+          <td class="td-red">~200%/year</td>
+          <td>Banking system froze deposits. Citizens trapped. Ongoing.</td>
+          <td>2020–present</td>
+        </tr>
+        <tr>
+          <td>Argentina</td>
+          <td class="td-red">~290%/year</td>
+          <td>10th currency crisis. IMF bailout. Dollar black markets. Ongoing.</td>
+          <td>2023–present</td>
+        </tr>
+        <tr>
+          <td>Turkey</td>
+          <td class="td-red">~85%/year</td>
+          <td>Lira lost 90% of value vs USD in 5 years. Ongoing debasement.</td>
+          <td>2021–present</td>
+        </tr>
+        <tr>
+          <td>United States</td>
+          <td class="td-gold">9.1% CPI peak (2022)</td>
+          <td>97% purchasing power lost since 1913. Ongoing, structural.</td>
+          <td>1913–present</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>The US dollar is not "safe" — it is simply the slowest-moving disaster. Reserve currency status buys time. But the same mechanism that destroyed the Venezuelan bolivar and the Zimbabwean dollar is operating in every fiat system on earth. The difference is the speed of the process, not the direction.</p>
+  </div>
+
+  <!-- THE FIX -->
+  <div class="section">
+    <div class="chapter">The Solution</div>
+    <h2>The First Truly Scarce Money in Human History</h2>
+    <p>For thousands of years, gold was the closest thing humanity had to hard money — scarce, durable, not easily reproduced. But gold has a fatal flaw: it can be confiscated, it cannot be easily transmitted across borders, and its supply is not perfectly fixed. New gold is mined every year. Governments can seize it. In 1933, Franklin Roosevelt signed Executive Order 6102 — making it illegal for Americans to own more than five ounces of gold. They complied, because they had no choice.</p>
+    <p>Bitcoin changes the equation permanently. There will only ever be 21 million Bitcoin. This is not a promise — it is mathematics. No government can print more. No central bank can issue more. No executive order can change the code. And unlike gold, Bitcoin cannot be seized from someone who holds their own keys, cannot be stopped at a border, and can be transmitted to anyone anywhere on earth in minutes.</p>
+
+    <div class="fix-grid">
+      <div class="fix-card bad">
+        <div class="fix-title">Fiat Money</div>
+        <ul class="fix-list">
+          <li>Supply is unlimited by design</li>
+          <li>Created by keystroke, backed by debt</li>
+          <li>Loses purchasing power every year</li>
+          <li>Can be frozen, seized, or inflated away</li>
+          <li>Requires trust in governments and banks</li>
+          <li>97% purchasing power lost since 1913</li>
+          <li>History: every fiat currency eventually fails</li>
+        </ul>
+      </div>
+      <div class="fix-card good">
+        <div class="fix-title">Bitcoin</div>
+        <ul class="fix-list">
+          <li>Hard cap of 21,000,000 — forever</li>
+          <li>New supply halves every 4 years until ~2140</li>
+          <li>Cannot be inflated by any authority</li>
+          <li>Self-custody = cannot be seized</li>
+          <li>Trustless — math enforces the rules</li>
+          <li>Borderless, permissionless, unstoppable</li>
+          <li>Hardest money ever created by humans</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stat-block gold">
+      <span class="stat-number gold">21,000,000</span>
+      <span class="stat-label">The most important number in monetary history. There will never be 21,000,001 Bitcoin. Not through inflation. Not through government decree. Not through any force on earth. This is what sound money looks like.</span>
+    </div>
+
+    <p>The people who understand this earliest benefit the most. Bitcoin is not a speculation on future technology. It is an exit from a system that is mathematically guaranteed to rob anyone who stays in it long enough.</p>
+  </div>
+
+</div>
+
+<!-- FINALE -->
+<div class="finale">
+  <div class="finale-label">₿ The Exit</div>
+  <h2>THERE IS A <span>DOOR</span></h2>
+  <p class="finale-body">The trap has an exit. 21 million coins. A fixed supply. A trustless system. The money the world deserves but was never allowed to have — until now.</p>
+  <div class="finale-links">
+    <a href="why-bitcoin-wins.html" class="finale-link">Why Bitcoin Wins →</a>
+    <a href="ColdStorage.html" class="finale-link">Secure Your Stack →</a>
+    <a href="NationState.html" class="finale-link">Nations Are Buying →</a>
+    <a href="index.html" class="finale-link">← All Tools</a>
+  </div>
+</div>
+
+<div class="footer-wrap">
+  <footer>
+    <div>
+      <div class="footer-logo">SATOLOGY</div>
+      <div class="footer-copy">© 2026 · Not Financial Advice · Stack Sats</div>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="why-bitcoin-wins.html">Why Bitcoin Wins</a>
+      <a href="Lightning.html">Lightning Network</a>
+      <a href="NationState.html">Nation-State Race</a>
+      <a href="ColdStorage.html">Cold Storage</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+async function fetchPrice(){
+  try{
+    const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+    const d=await r.json();
+    document.getElementById('btcPriceNav').textContent='$'+d.bitcoin.usd.toLocaleString('en-US',{maximumFractionDigits:0});
+  }catch(e){}
+}
+fetchPrice();
+setInterval(fetchPrice,60000);
+
+// Scroll reveal
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+},{threshold:.1});
+document.querySelectorAll('.section').forEach(s=>observer.observe(s));
+
+// Animated bars — trigger when supply section enters viewport
+const barObserver=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.bar-fill').forEach(bar=>{
+        const w=bar.dataset.width;
+        setTimeout(()=>{bar.style.width=w+'%'},100);
+      });
+      barObserver.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+const supplySection=document.getElementById('supplySection');
+if(supplySection)barObserver.observe(supplySection);
+</script>
+</body>
+</html>

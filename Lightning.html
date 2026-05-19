@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0A0805">
+<title>The Lightning Network — Bitcoin Layer 2 | SATOLOGY</title>
+<meta name="description" content="How Lightning, Liquid, and Layer 2 protocols are making Bitcoin instant, cheap, and global. The future of money is being built right now.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:#0A0805;color-scheme:dark}
+body{background:#0A0805;color:#E8DEC8;font-family:'Libre Baskerville',Georgia,serif;line-height:1.8;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:.5}
+
+nav{position:sticky;top:0;z-index:200;height:60px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,8,5,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(240,165,0,.1)}
+.nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+.nav-logo-sym{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:#F0A500}
+.nav-logo-name{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.22em;color:#E8DEC8;text-transform:uppercase}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-back{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.15em;color:#C0AD90;text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nav-back:hover{color:#F0A500}
+.nav-price{display:flex;align-items:center;gap:.45rem;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.2);border-radius:100px;padding:5px 12px;font-family:'IBM Plex Mono',monospace;font-size:.9rem;font-weight:600;color:#F0A500}
+.nav-dot{width:6px;height:6px;background:#4CAF50;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4rem 2rem;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(240,200,0,.07) 0%,transparent 70%);border-bottom:1px solid rgba(240,165,0,.12);position:relative}
+.hero-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.25em;color:#F0A500;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .2s forwards}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,12vw,9rem);line-height:.92;letter-spacing:.02em;color:#FAF5EB;max-width:900px;opacity:0;animation:fadeUp .9s .4s forwards}
+.hero h1 span{color:#F0A500;display:block}
+.hero-sub{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:clamp(1.05rem,2.5vw,1.4rem);color:#C0AD90;margin-top:1.5rem;max-width:620px;opacity:0;animation:fadeUp .9s .65s forwards}
+.scroll-hint{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0;animation:fadeUp 1s 1.4s forwards}
+.scroll-hint span{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.2em;color:#C0AD90;text-transform:uppercase}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#F0A500,transparent);animation:scrollPulse 2s ease-in-out infinite}
+
+/* STAT STRIP */
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid rgba(240,165,0,.1);border-top:1px solid rgba(240,165,0,.1)}
+.stat-cell{padding:2rem 1.5rem;text-align:center;border-right:1px solid rgba(240,165,0,.08)}
+.stat-cell:last-child{border-right:none}
+.stat-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.5rem);color:#F0A500;line-height:1;display:block;margin-bottom:.3rem}
+.stat-desc{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;text-transform:uppercase;line-height:1.4}
+
+/* MAIN */
+.page-wrap{max-width:1100px;margin:0 auto;padding:4rem 2rem 8rem}
+
+/* SECTION DIVIDER */
+.chapter{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.25em;color:#C47F00;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:1rem}
+.chapter::after{content:'';flex:1;height:1px;background:rgba(240,165,0,.15)}
+h2{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.2;color:#FAF5EB;margin-bottom:1.5rem;font-weight:400}
+p{margin-bottom:1.2rem;color:#E8DEC8;font-size:1.05rem}
+
+/* CONTENT BLOCKS */
+.section{margin-bottom:5rem;opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.section.visible{opacity:1;transform:translateY(0)}
+
+blockquote{padding:2.5rem 0;margin:3rem 0;border-top:1px solid rgba(240,165,0,.15);border-bottom:1px solid rgba(240,165,0,.15)}
+blockquote p{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:clamp(1.3rem,3vw,1.9rem);color:#FAF5EB;line-height:1.4;margin-bottom:0}
+blockquote cite{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.1em;text-transform:uppercase;display:block;margin-top:1rem}
+
+.mono-fact{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#F0A500;background:rgba(240,165,0,.06);border-left:2px solid #F0A500;padding:1rem 1.5rem;margin:2rem 0;letter-spacing:.05em;line-height:1.7}
+
+.stat-block{background:#110E08;border:1px solid rgba(240,165,0,.2);border-left:3px solid #F0A500;padding:2.5rem 2rem;margin:2.5rem 0}
+.stat-number{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,5rem);color:#F0A500;line-height:1;display:block;margin-bottom:.4rem}
+.stat-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;text-transform:uppercase}
+
+/* LAYER COMPARISON */
+.layer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;margin:2.5rem 0}
+.layer-card{background:#0E0B07;border:1px solid rgba(240,165,0,.15);padding:2rem;position:relative;overflow:hidden}
+.layer-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.layer-card.l1::before{background:#F0A500}
+.layer-card.l2a::before{background:#FFD700}
+.layer-card.l2b::before{background:#C0AD90}
+.layer-name{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.06em;margin-bottom:.5rem}
+.layer-card.l1 .layer-name{color:#F0A500}
+.layer-card.l2a .layer-name{color:#FFD700}
+.layer-card.l2b .layer-name{color:#C0AD90}
+.layer-tag{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;display:block}
+.layer-specs{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.layer-specs li{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;padding-left:1rem;position:relative;line-height:1.5}
+.layer-specs li::before{content:'→';position:absolute;left:0;color:#F0A500;font-size:.8rem}
+
+/* HOW IT WORKS VISUAL */
+.channel-visual{background:#0C0A06;border:1px solid rgba(240,165,0,.15);padding:2.5rem;margin:2.5rem 0}
+.channel-title{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.2em;color:#C47F00;text-transform:uppercase;margin-bottom:2rem}
+.channel-flow{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:2rem}
+.channel-node{background:#110E08;border:1px solid rgba(240,165,0,.2);padding:1.2rem 1.5rem;text-align:center;flex:1;min-width:120px}
+.node-name{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:#FAF5EB;letter-spacing:.06em}
+.node-sub{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#888;letter-spacing:.08em;margin-top:.2rem}
+.channel-arrow{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#F0A500;flex-shrink:0}
+.channel-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;text-align:center}
+.channel-steps{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}
+.step{display:flex;gap:1rem;align-items:flex-start}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#F0A500;line-height:1;flex-shrink:0;width:2rem}
+.step-text{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;line-height:1.5}
+
+/* ADOPTION CARDS */
+.adopt-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:2.5rem 0}
+.adopt-card{background:#0E0B07;border:1px solid rgba(240,165,0,.15);border-left:3px solid #F0A500;padding:2rem}
+.adopt-company{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:#FAF5EB;margin-bottom:.3rem}
+.adopt-founder{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#F0A500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem}
+.adopt-body{font-family:'Libre Baskerville',serif;font-size:.95rem;color:#C0AD90;line-height:1.7}
+.adopt-stat{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#4CAF50;margin-top:1rem;display:block}
+
+/* FUTURE TABLE */
+.future-table{width:100%;border-collapse:collapse;margin:2rem 0}
+.future-table th{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;color:#C47F00;text-align:left;padding:.8rem 1rem;background:#110E08;border-bottom:1px solid rgba(240,165,0,.2)}
+.future-table td{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;padding:.9rem 1rem;border-bottom:1px solid rgba(240,165,0,.07)}
+.future-table tr:hover td{background:rgba(240,165,0,.03)}
+.future-table td:first-child{color:#FAF5EB}
+.status-live{color:#4CAF50}
+.status-build{color:#F0A500}
+.status-soon{color:#888}
+
+/* FINALE */
+.finale{background:#070604;border-top:1px solid rgba(240,165,0,.15);padding:6rem 2rem;text-align:center}
+.finale-label{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.25em;color:#F0A500;text-transform:uppercase;margin-bottom:2rem}
+.finale h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,8vw,6rem);line-height:1;letter-spacing:.02em;color:#FAF5EB;max-width:700px;margin:0 auto 1.5rem}
+.finale h2 span{color:#F0A500}
+.finale-body{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:1.2rem;color:#C0AD90;max-width:520px;margin:0 auto 2rem}
+.finale-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
+.finale-link{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.15em;text-transform:uppercase;color:#C0AD90;text-decoration:none;border:1px solid rgba(240,165,0,.2);padding:.8rem 1.4rem;transition:color .2s,border-color .2s}
+.finale-link:hover{color:#F0A500;border-color:rgba(240,165,0,.5)}
+
+/* FOOTER */
+.footer-wrap{background:#070604;border-top:1px solid rgba(240,165,0,.1)}
+footer{max-width:1100px;margin:0 auto;padding:3rem 2rem;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:2rem}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#F0A500;letter-spacing:.06em}
+.footer-copy{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:#C0AD90;letter-spacing:.08em;text-transform:uppercase;margin-top:.5rem}
+.footer-links{display:flex;flex-direction:column;gap:.5rem;align-items:flex-end}
+.footer-links a{font-family:'IBM Plex Mono',monospace;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;color:#C0AD90;text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:#F0A500}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+@media(max-width:700px){
+  .stat-strip{grid-template-columns:1fr 1fr}
+  .layer-grid{grid-template-columns:1fr}
+  .channel-steps{grid-template-columns:1fr}
+  .adopt-grid{grid-template-columns:1fr}
+  nav{padding:0 1rem}
+  .nav-back{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-sym">₿</span>
+    <span class="nav-logo-name">SATOLOGY</span>
+  </a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← Home</a>
+    <div class="nav-price">
+      <span class="nav-dot"></span>
+      <span id="btcPriceNav">$--</span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <p class="hero-label">⚡ Bitcoin Layer 2</p>
+  <h1>THE LIGHTNING<span>NETWORK</span></h1>
+  <p class="hero-sub">Bitcoin settles. Lightning moves. The second layer is turning digital gold into instant global money — and businesses are already using it.</p>
+  <div class="scroll-hint">
+    <span>Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<!-- LIVE STATS STRIP -->
+<div class="stat-strip">
+  <div class="stat-cell">
+    <span class="stat-big">5,606+</span>
+    <span class="stat-desc">BTC Locked in Lightning Channels (All-Time High)</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-big">75K+</span>
+    <span class="stat-desc">Active Payment Channels · May 2026</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-big">4M+</span>
+    <span class="stat-desc">Merchants Globally Accepting Lightning</span>
+  </div>
+  <div class="stat-cell">
+    <span class="stat-big">65+</span>
+    <span class="stat-desc">Countries Strike Operates In · 3B People</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- THE PROBLEM -->
+  <div class="section">
+    <div class="chapter">The Scaling Problem</div>
+    <h2>Bitcoin Is the Perfect Store of Value. It Was Never Meant to Buy Coffee.</h2>
+    <p>The Bitcoin base layer processes roughly 7 transactions per second. Visa handles 24,000. For Bitcoin to become a global payment rail — used by billions of people for daily purchases, business invoices, and international remittances — something had to change. But changing the base layer meant risking the very security and decentralization that make Bitcoin worth anything in the first place.</p>
+    <p>The answer was not to change Bitcoin. The answer was to build on top of it.</p>
+    <p>Layer 2 protocols let users transact with Bitcoin's security guarantees without writing every payment to the blockchain. Think of it like a tab at a bar — you run up the tab all night, but only one transaction settles at the end. Except with Lightning, the tab settles in milliseconds and can route payments across the entire planet through a trustless network of payment channels.</p>
+
+    <div class="mono-fact">
+      Bitcoin base layer: ~7 TPS · $1–$5 per transaction · 10-minute confirmation<br>
+      Lightning Network: 1,000,000+ TPS theoretical · &lt;$0.01 · &lt;1 second settlement
+    </div>
+  </div>
+
+  <!-- LAYER COMPARISON -->
+  <div class="section">
+    <div class="chapter">The Layers</div>
+    <h2>Three Layers, One Bitcoin</h2>
+    <p>Not all Layer 2s work the same way. Bitcoin now has multiple complementary second-layer protocols, each optimized for different use cases.</p>
+
+    <div class="layer-grid">
+      <div class="layer-card l1">
+        <div class="layer-name">Bitcoin L1</div>
+        <span class="layer-tag">The Settlement Layer</span>
+        <ul class="layer-specs">
+          <li>~7 transactions per second</li>
+          <li>~10 minute block time</li>
+          <li>Maximum security &amp; decentralization</li>
+          <li>Best for: large settlements, long-term storage</li>
+          <li>21 million coin hard cap</li>
+        </ul>
+      </div>
+      <div class="layer-card l2a">
+        <div class="layer-name">⚡ Lightning</div>
+        <span class="layer-tag">The Payment Layer</span>
+        <ul class="layer-specs">
+          <li>Near-instant settlement (&lt;1 sec)</li>
+          <li>Sub-cent transaction fees</li>
+          <li>Millions of TPS theoretical</li>
+          <li>Best for: daily payments, micropayments, remittances</li>
+          <li>5,606+ BTC locked in channels</li>
+        </ul>
+      </div>
+      <div class="layer-card l2b">
+        <div class="layer-name">Liquid</div>
+        <span class="layer-tag">The Asset Layer</span>
+        <ul class="layer-specs">
+          <li>2-minute block finality</li>
+          <li>Confidential transactions</li>
+          <li>Supports stablecoins (USDt) &amp; tokens</li>
+          <li>Best for: trading, institutional settlement, asset issuance</li>
+          <li>1:1 Bitcoin peg via L-BTC</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW LIGHTNING WORKS -->
+  <div class="section">
+    <div class="chapter">How It Works</div>
+    <h2>Payment Channels, HTLCs, and the Routing Miracle</h2>
+    <p>Lightning works through a network of bidirectional payment channels. Two parties lock Bitcoin into a shared 2-of-2 multisignature address on-chain — this "opens" the channel. From that point, they can transact back and forth as many times as they want, instantly and for free, without touching the blockchain. Only when they choose to "close" the channel is the final balance settled on-chain.</p>
+    <p>The real magic is routing. You don't need a direct channel with every person you want to pay. Payments route through a web of existing channels using Hashed Timelock Contracts — cryptographic agreements that guarantee the payment either completes fully or fails completely. There is no partial payment, no trust required, no intermediary holding your money.</p>
+
+    <div class="channel-visual">
+      <div class="channel-title">// Multi-Hop Lightning Payment</div>
+      <div class="channel-flow">
+        <div class="channel-node">
+          <div class="node-name">Alice</div>
+          <div class="node-sub">Sends 10K sats</div>
+        </div>
+        <div class="channel-arrow">⚡→</div>
+        <div class="channel-node">
+          <div class="node-name">Bob</div>
+          <div class="node-sub">Routing node</div>
+        </div>
+        <div class="channel-arrow">⚡→</div>
+        <div class="channel-node">
+          <div class="node-name">Carol</div>
+          <div class="node-sub">Routing node</div>
+        </div>
+        <div class="channel-arrow">⚡→</div>
+        <div class="channel-node">
+          <div class="node-name">Dave</div>
+          <div class="node-sub">Receives 10K sats</div>
+        </div>
+      </div>
+      <div class="channel-label">Alice and Dave have no direct channel. Payment routes through Bob and Carol atomically in under one second.</div>
+      <div class="channel-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Dave generates a secret and sends Alice a "hash" of that secret as a payment request (invoice)</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Alice locks funds via HTLC: "I'll pay Bob IF he reveals the secret within 1 hour"</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Bob and Carol each forward the same conditional payment along the route</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">Dave reveals the secret. It cascades backward — everyone collects. Payment complete.</div>
+        </div>
+      </div>
+    </div>
+
+    <blockquote>
+      <p>"Lightning doesn't just make Bitcoin faster. It makes Bitcoin programmable money — capable of powering anything from machine-to-machine micropayments to global remittances."</p>
+      <cite>— Jack Mallers, CEO Strike</cite>
+    </blockquote>
+  </div>
+
+  <!-- LIQUID + AQUA -->
+  <div class="section">
+    <div class="chapter">The Liquid Network</div>
+    <h2>Bitcoin's Confidential Settlement Layer</h2>
+    <p>While Lightning optimizes for speed and micropayments, the Liquid Network — built by Blockstream — solves a different problem: confidential, fast settlement for institutions, traders, and users who need privacy and asset issuance capabilities.</p>
+    <p>Liquid uses a federated sidechain model. Users "peg in" real Bitcoin to receive L-BTC at a 1:1 ratio, transact on the sidechain with 2-minute finality and confidential transaction amounts, then "peg out" back to Bitcoin whenever they choose. Critically, Liquid supports native stablecoins — Tether's USDt runs on Liquid, meaning users in countries with volatile currencies can hold dollar-denominated assets backed by Bitcoin infrastructure.</p>
+
+    <div class="stat-block">
+      <span class="stat-number">AQUA</span>
+      <span class="stat-label">The wallet by JAN3 (Samson Mow) that unifies Bitcoin, Lightning, and Liquid in one interface. Hold BTC, send Lightning payments, and hold USDt on Liquid — all from one app. Pay network fees in any asset, no separate "gas" token required. Financial freedom for the 4 billion unbanked.</span>
+    </div>
+
+    <p>Aqua is designed specifically for emerging markets — countries where local currencies collapse regularly, where banking infrastructure is unreliable, and where people need dollar-stable savings alongside Bitcoin exposure. In Argentina, Zimbabwe, or Lebanon, Aqua gives users a way to escape currency destruction without depending on a bank at all.</p>
+  </div>
+
+  <!-- REAL WORLD ADOPTION -->
+  <div class="section">
+    <div class="chapter">Real-World Adoption</div>
+    <h2>The Lightning Economy Is Already Here</h2>
+    <p>Lightning is no longer theoretical. The biggest companies in payments are already integrating it into infrastructure used by hundreds of millions of people.</p>
+
+    <div class="adopt-grid">
+      <div class="adopt-card">
+        <div class="adopt-company">Block Inc</div>
+        <div class="adopt-founder">Jack Dorsey · Founder</div>
+        <div class="adopt-body">Block (formerly Square) is rolling out Bitcoin Lightning payments across all Square point-of-sale terminals. Merchants get a QR code — customers pay instantly in Bitcoin via Lightning. Merchants can hold the Bitcoin or auto-convert to USD in real time. Full rollout planned across all Square terminals by 2026, integrating Lightning into millions of small businesses worldwide.</div>
+        <span class="adopt-stat">Millions of Square merchants · Full rollout 2026</span>
+      </div>
+      <div class="adopt-card">
+        <div class="adopt-company">Strike</div>
+        <div class="adopt-founder">Jack Mallers · CEO</div>
+        <div class="adopt-body">Strike is the most aggressive Lightning payment company in the world. Operating in 65+ countries, serving nearly 3 billion people, integrated with Shopify, NCR, and Blackhawk. Strike raised $80M in funding and partners with global point-of-sale and e-commerce platforms. Mallers also now leads Twenty One Capital — a publicly-traded Bitcoin accumulation vehicle targeting nation-state scale holdings.</div>
+        <span class="adopt-stat">65+ countries · $80M raised · 3B addressable users</span>
+      </div>
+      <div class="adopt-card">
+        <div class="adopt-company">Cash App</div>
+        <div class="adopt-founder">Block Inc</div>
+        <div class="adopt-body">Cash App has supported Lightning withdrawals and payments since 2022, giving tens of millions of US users instant, near-free Bitcoin transfers. Combined with the Square terminal rollout, Block is building the most complete Lightning payment ecosystem outside of dedicated Bitcoin startups.</div>
+        <span class="adopt-stat">Tens of millions of US users</span>
+      </div>
+      <div class="adopt-card">
+        <div class="adopt-company">Lightspark</div>
+        <div class="adopt-founder">David Marcus · Ex-PayPal President</div>
+        <div class="adopt-body">Lightspark, founded by former PayPal and Facebook Libra lead David Marcus, is building enterprise Lightning infrastructure for banks and financial institutions. Universal Money Address (UMA) extends Lightning with compliance features, allowing banks to use Lightning rails with existing regulatory frameworks — the bridge between traditional finance and open monetary networks.</div>
+        <span class="adopt-stat">Enterprise Lightning infrastructure for banks</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT'S BEING BUILT -->
+  <div class="section">
+    <div class="chapter">The Frontier</div>
+    <h2>What's Being Built Right Now</h2>
+    <p>Lightning is not a finished product — it is a platform. The ecosystem building on top of it is creating capabilities that didn't exist five years ago and will define global money movement for decades to come.</p>
+
+    <table class="future-table">
+      <thead>
+        <tr>
+          <th>Technology</th>
+          <th>What It Does</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Taproot Assets</td>
+          <td>Issue stablecoins and tokens directly on Lightning — pay in USDt, settle in BTC</td>
+          <td class="status-live">Live on Mainnet</td>
+        </tr>
+        <tr>
+          <td>BOLT 12 (Offers)</td>
+          <td>Reusable payment codes — like an email address for Lightning, no new invoice per payment</td>
+          <td class="status-live">Deployed</td>
+        </tr>
+        <tr>
+          <td>Splicing</td>
+          <td>Resize channels without closing them — dramatically improves liquidity management</td>
+          <td class="status-build">Rolling Out</td>
+        </tr>
+        <tr>
+          <td>Fedimint</td>
+          <td>Federated custodial Lightning for communities — easier onboarding for the unbanked</td>
+          <td class="status-build">Active Development</td>
+        </tr>
+        <tr>
+          <td>Ark Protocol</td>
+          <td>Off-chain UTXO management — Lightning-like speed without always-online node requirement</td>
+          <td class="status-build">Active Development</td>
+        </tr>
+        <tr>
+          <td>Machine Payments</td>
+          <td>AI agents, IoT devices, and software paying each other in millisats autonomously</td>
+          <td class="status-soon">Emerging</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>The endgame is an open, permissionless global payment network that settles in Bitcoin, moves at internet speed, and is accessible to anyone with a smartphone — no bank account required, no government permission needed, no intermediary taking a cut.</p>
+
+    <div class="mono-fact">
+      $1.17 billion in Lightning volume processed in late 2025 / early 2026<br>
+      Network capacity hit all-time high: 5,606 BTC (~$490M) locked in channels<br>
+      75,000+ active channels · 17,000+ public nodes
+    </div>
+  </div>
+
+</div>
+
+<!-- FINALE -->
+<div class="finale">
+  <div class="finale-label">⚡ The Speed of Lightning</div>
+  <h2>MONEY AT THE <span>SPEED OF LIGHT</span></h2>
+  <p class="finale-body">The base layer stores value for centuries. The second layer moves it in milliseconds. Together, they are the most complete monetary system ever built.</p>
+  <div class="finale-links">
+    <a href="Blockchain.html" class="finale-link">How Bitcoin Works →</a>
+    <a href="ColdStorage.html" class="finale-link">Secure Your Keys →</a>
+    <a href="NationState.html" class="finale-link">Nation-State Race →</a>
+    <a href="index.html" class="finale-link">← All Tools</a>
+  </div>
+</div>
+
+<div class="footer-wrap">
+  <footer>
+    <div>
+      <div class="footer-logo">SATOLOGY</div>
+      <div class="footer-copy">© 2026 · Not Financial Advice · Stack Sats</div>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="Network.html">The Network</a>
+      <a href="Blockchain.html">The Blockchain</a>
+      <a href="FiatTrap.html">The Fiat Trap</a>
+      <a href="NationState.html">Nation-State Race</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+async function fetchPrice(){
+  try{
+    const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+    const d=await r.json();
+    document.getElementById('btcPriceNav').textContent='$'+d.bitcoin.usd.toLocaleString('en-US',{maximumFractionDigits:0});
+  }catch(e){}
+}
+fetchPrice();
+setInterval(fetchPrice,60000);
+
+// Scroll reveal
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+},{threshold:.1});
+document.querySelectorAll('.section').forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>
